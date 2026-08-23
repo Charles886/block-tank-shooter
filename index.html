@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>方塊射擊</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="hud" id="hud">
+            <div class="hud-item"><span class="hud-label">分數</span><span class="hud-value" id="score">0</span></div>
+            <div class="hud-item"><span class="hud-label">生命</span><span class="hud-value" id="health">100</span></div>
+            <div class="hud-item"><span class="hud-label">波次</span><span class="hud-value" id="wave">1</span></div>
+            <div class="hud-item"><span class="hud-label">道具</span><span class="hud-value" id="powerups">-</span></div>
+        </div>
+        <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+        <!-- 開始畫面 -->
+        <div class="overlay" id="overlay">
+            <div class="overlay-content">
+                <h1>方塊射擊</h1>
+                <div class="instructions">
+                    <p><strong>W A S D</strong> — 移動</p>
+                    <p><strong>滑鼠 / 觸控</strong> — 瞄準</p>
+                    <p><strong>按住左鍵 / 觸控</strong> — 射擊</p>
+                    <p><strong>空白鍵</strong> — 暫停</p>
+                    <p>撿取掉落道具：<span style="color:#06d6a0">治療</span> <span style="color:#118ab2">快速射擊</span> <span style="color:#ef476f">三倍子彈</span></p>
+                </div>
+                <button class="btn btn-primary" id="startBtn">開始遊戲</button>
+            </div>
+        </div>
+
+        <!-- 暫停畫面 -->
+        <div class="overlay hidden" id="pauseOverlay">
+            <div class="overlay-content">
+                <h1>暫停中</h1>
+                <p>按空白鍵繼續</p>
+            </div>
+        </div>
+
+        <!-- 結束畫面 -->
+        <div class="overlay hidden" id="gameOverScreen">
+            <div class="overlay-content">
+                <h1>遊戲結束</h1>
+                <div class="final-score">最終分數: <span id="finalScore">0</span></div>
+                <p id="waveReached" style="color:#888; margin-bottom: 10px;"></p>
+                <button class="btn btn-restart" id="restartBtn">重新開始</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="sound.js"></script>
+    <script src="entities.js"></script>
+    <script src="powerups.js"></script>
+    <script src="core.js"></script>
+</body>
+</html>
