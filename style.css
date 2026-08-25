@@ -121,6 +121,66 @@ body {
     margin: 20px 0;
 }
 
+/* ===== 排行榜 ===== */
+.leaderboard {
+    margin: 16px auto 6px;
+    width: 320px;
+    max-width: 80%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 14px 20px;
+    text-align: left;
+}
+
+.leaderboard h2 {
+    font-size: 18px;
+    color: #00f5d4;
+    margin-bottom: 10px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.lb-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.lb-row + .lb-row { margin-top: 2px; }
+
+.lb-top {
+    background: rgba(255, 214, 10, 0.12);
+}
+
+.lb-rank {
+    width: 28px;
+    text-align: center;
+    font-size: 17px;
+}
+
+.lb-score {
+    font-weight: bold;
+    color: #fff;
+    font-size: 18px;
+}
+
+.lb-wave {
+    margin-left: auto;
+    color: #888;
+    font-size: 13px;
+}
+
+.lb-empty {
+    color: #888;
+    text-align: center;
+    font-size: 14px;
+    padding: 6px 0;
+}
+
 /* ===== 按鈕 ===== */
 .btn {
     padding: 14px 40px;

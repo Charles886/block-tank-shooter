@@ -46,6 +46,7 @@ const keys = {};
 let mouse = { x: W / 2, y: 0, down: false };
 
 window.addEventListener('keydown', e => {
+    if (e.repeat) return; // 忽略按住持續重複觸發，避免 Enter 誤觸「重新開始」等按鈕
     keys[e.key.toLowerCase()] = true;
     if (e.key === ' ') { e.preventDefault(); togglePause(); }
 });
@@ -110,6 +111,7 @@ function startGame() {
     $('gameOverScreen').classList.add('hidden');
     $('pauseOverlay').classList.add('hidden');
     $('hud').classList.remove('hidden');
+    Leaderboard.renderAll();
     Sound.wave();
 }
 
@@ -163,7 +165,7 @@ function updatePlayer() {
     if (p.invuln > 0) p.invuln--;
 
     p.shootCd--;
-    if (mouse.down && p.shootCd <= 0) {
+    if ((mouse.down || keys['enter']) && p.shootCd <= 0) {
         p.shootCd = p.shootRate;
         const shots = p.tripleShot ? [-0.18, 0, 0.18] : [0];
         for (const off of shots) {
@@ -323,6 +325,8 @@ function doGameOver() {
     game.running = false;
     $('finalScore').textContent = game.score;
     $('waveReached').textContent = '撐到第 ' + game.wave + ' 波';
+    Leaderboard.submit(game.score, game.wave);
+    Leaderboard.render('lbEnd');
     $('gameOverScreen').classList.remove('hidden');
     Sound.gameOver();
 }
@@ -460,6 +464,7 @@ function updateHud() {
 }
 
 // ---------- 遊戲迴圈 ----------
+Leaderboard.renderAll();
 let lastTime = 0;
 function loop(time) {
     requestAnimationFrame(loop);
