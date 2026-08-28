@@ -8,13 +8,63 @@
 </head>
 <body>
     <div class="game-container">
+        <!-- 商店按鈕 -->
+        <button class="shop-toggle-btn" id="shopToggleBtn" title="開啟商店 (B)">🛒</button>
+        
         <div class="hud" id="hud">
             <div class="hud-item"><span class="hud-label">分數</span><span class="hud-value" id="score">0</span></div>
-            <div class="hud-item"><span class="hud-label">生命</span><span class="hud-value" id="health">100</span></div>
+            <div class="hud-item"><span class="hud-label">金幣</span><span class="hud-value" id="goldCount" style="color:#ffd700">0</span></div>
+            <div class="hud-item"><span class="hud-label">生命</span><span class="hud-value" id="health">100</span><span class="hud-value" id="maxHealth" style="font-size:14px;color:#888">/100</span></div>
             <div class="hud-item"><span class="hud-label">波次</span><span class="hud-value" id="wave">1</span></div>
             <div class="hud-item"><span class="hud-label">道具</span><span class="hud-value" id="powerups">-</span></div>
         </div>
         <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+        <!-- 商店面板 -->
+        <div class="shop-panel hidden" id="shopPanel">
+            <div class="shop-header">
+                <h3>🛒 商店</h3>
+                <span class="shop-gold">💰 <span id="shopGold">0</span></span>
+                <button class="shop-close-btn" id="shopCloseBtn">✕</button>
+            </div>
+            <div class="shop-items">
+                <div class="shop-item" data-item="health" onclick="Shop.buy('health')">
+                    <div class="shop-item-icon">❤️</div>
+                    <div class="shop-item-info">
+                        <div class="shop-item-name">最大生命 +25</div>
+                        <div class="shop-item-desc">永久增加最大生命值</div>
+                    </div>
+                    <div class="shop-item-cost">💰 50</div>
+                </div>
+                <div class="shop-item" data-item="damage" onclick="Shop.buy('damage')">
+                    <div class="shop-item-icon">⚔️</div>
+                    <div class="shop-item-info">
+                        <div class="shop-item-name">傷害 +1</div>
+                        <div class="shop-item-desc">永久增加子彈傷害</div>
+                    </div>
+                    <div class="shop-item-cost">💰 75</div>
+                </div>
+                <div class="shop-item" data-item="speed" onclick="Shop.buy('speed')">
+                    <div class="shop-item-icon">⚡</div>
+                    <div class="shop-item-info">
+                        <div class="shop-item-name">移動速度 +10%</div>
+                        <div class="shop-item-desc">永久增加移動速度</div>
+                    </div>
+                    <div class="shop-item-cost">💰 40</div>
+                </div>
+                <div class="shop-item" data-item="firerate" onclick="Shop.buy('firerate')">
+                    <div class="shop-item-icon">🔥</div>
+                    <div class="shop-item-info">
+                        <div class="shop-item-name">射速 +15%</div>
+                        <div class="shop-item-desc">永久減少射擊間隔</div>
+                    </div>
+                    <div class="shop-item-cost">💰 100</div>
+                </div>
+            </div>
+            <div class="shop-footer">
+                <p class="shop-hint">按 B 鍵開啟/關閉商店</p>
+            </div>
+        </div>
 
         <!-- 開始畫面 -->
         <div class="overlay" id="overlay">
@@ -62,6 +112,7 @@
     <script src="entities.js"></script>
     <script src="powerups.js"></script>
     <script src="leaderboard.js"></script>
+    <script src="shop.js"></script>
     <script src="core.js"></script>
 </body>
 </html>

@@ -12,6 +12,7 @@ const game = {
     running: false,
     paused: false,
     score: 0,
+    gold: 0,            // 玩家持有金幣
     wave: 1,
     kills: 0,
     killsForNext: 5,
@@ -19,10 +20,14 @@ const game = {
     bullets: [],
     enemies: [],
     powerups: [],
+    goldDrops: [],      // 掉落金幣
     particles: [],
     waveBanner: 0,
     shake: 0,
     player: null,
+    shopOpen: false,    // 商店模式旗標
+    shopTimer: 0,       // 商店倒數
+    shopTriggered: false, // 本局商店是否已觸發
 };
 
 function resetPlayer() {
@@ -39,6 +44,25 @@ function resetPlayer() {
         invuln: 0,          // 受傷無敵幀數
         trail: [],
     };
+}
+
+function resetGame() {
+    game.score = 0;
+    game.gold = 0;
+    game.wave = 1;
+    game.kills = 0;
+    game.killsForNext = 5;
+    game.spawnTimer = 60;
+    game.bullets = [];
+    game.enemies = [];
+    game.powerups = [];
+    game.goldDrops = [];
+    game.particles = [];
+    game.waveBanner = 120;
+    game.shake = 0;
+    game.shopOpen = false;
+    game.shopTimer = 0;
+    game.shopTriggered = false;
 }
 
 // ---------- 輸入 ----------
@@ -251,6 +275,20 @@ function handleCollisions() {
                 game.shake = Math.max(game.shake, e.type === 'tank' ? 8 : 4);
                 // 掉落道具（20% 機率）
                 if (Math.random() < 0.2) game.powerups.push(makePowerup(e.x, e.y));
+                // 掉落金幣（100% 機率，數量依敵人類型）
+                const goldCount = e.type === 'tank' ? 5 : e.type === 'shooter' ? 3 : 1;
+                for (let g = 0; g < goldCount; g++) {
+                    game.gold.push({
+                        x: e.x + (Math.random() - 0.5) * 20,
+                        y: e.y + (Math.random() - 0.5) * 20,
+                        w: 12, h: 12,
+                        value: e.type === 'tank' ? 2 : 1,
+                        life: 600, // 10 秒後消失
+                        bobPhase: Math.random() * Math.PI * 2,
+                        vy: -2 - Math.random() * 2, // 彈跳初速
+                        gravity: 0.15,
+                    });
+                }
             }
             break;
         }
@@ -287,6 +325,15 @@ function handleCollisions() {
             pu.life = 0;
             applyPowerup(pu, game);
             spawnParticles(pu.x, pu.y, POWERUP_TYPES[pu.type].color, 12, 3);
+        }
+    }
+
+    // 玩家 vs 金幣
+    for (const g of game.goldDrops) {
+        if (rectsOverlap(g, p)) {
+            g.life = 0;
+            game.gold += g.value;
+            spawnParticles(g.x, g.y, '#ffd700', 6, 2);
         }
     }
 
@@ -453,7 +500,9 @@ function render() {
 function updateHud() {
     if (!game.player) return;
     $('score').textContent = game.score;
+    $('goldCount').textContent = game.gold;
     $('health').textContent = Math.max(0, Math.ceil(game.player.health));
+    $('maxHealth').textContent = game.player.maxHealth;
     $('wave').textContent = game.wave;
     const pu = [];
     if (game.player.tripleShot) pu.push('三倍');
